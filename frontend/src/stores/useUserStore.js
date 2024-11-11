@@ -17,13 +17,15 @@ export const useUserStore = create((set, get) => ({
 
         try {
             set({ loading: true });
-            const { data } = await axios.post("/auth/signup", {
+            const { data } = await axios.post("/auth/register", {
                 name,
                 email,
                 password,
                 confirmPassword,
             });
-            set({ user: data.user, loading: false });
+
+            toast.success("Account created successfully");
+            set({ user: data, loading: false });
             return data;
         } catch (error) {
             set({ loading: false });
@@ -39,7 +41,11 @@ export const useUserStore = create((set, get) => ({
                 email,
                 password,
             });
-            set({ user: data.user, loading: false });
+
+            console.log(data);
+
+            toast.success("Login successful");
+            set({ user: data, loading: false });
             return data;
         } catch (error) {
             set({ loading: false });
@@ -50,7 +56,9 @@ export const useUserStore = create((set, get) => ({
 
     logout: async () => {
         try {
-            await axios.post("/auth/logout");
+            await axios.get("/auth/logout");
+
+            toast.success("Logout successful");
             set({ user: null });
         } catch (error) {
             toast.error(
@@ -61,6 +69,18 @@ export const useUserStore = create((set, get) => ({
     },
 
     checkAuth: async () => {
+        set({ checkingAuth: true });
+        try {
+            const response = await axios.get("/auth/profile");
+            set({ user: response.data, checkingAuth: false });
+        } catch (error) {
+            console.log(error.message);
+            set({ checkingAuth: false, user: null });
+        }
+    },
+
+    refreshToken: async () => {
+        // Prevent multiple simultaneous refresh attempts
         if (get().checkingAuth) return;
 
         set({ checkingAuth: true });

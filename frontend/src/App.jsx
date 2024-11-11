@@ -10,9 +10,22 @@ import PurchaseCancelPage from "./pages/PurchaseCancelPage";
 
 import { Toaster } from "react-hot-toast";
 import Navbar from "./components/Navbar";
+import { useUserStore } from "./stores/useUserStore";
+import { useEffect } from "react";
+import LoadingSpinner from "./components/LoadingSpinner";
 
 function App() {
-    const user = false;
+    const { user, checkAuth, checkingAuth } = useUserStore();
+
+    useEffect(() => {
+        console.log("checking auth");
+        checkAuth();
+    }, [checkAuth]);
+
+    if (checkingAuth) {
+        return <LoadingSpinner />;
+    }
+
     return (
         <div className="min-h-screen bg-gray-900 text-white relative overflow-hidden">
             {/* Background gradient */}
