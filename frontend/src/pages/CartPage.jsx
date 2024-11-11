@@ -9,6 +9,7 @@ import OrderSummary from "../components/OrderSummary";
 
 const CartPage = () => {
     const { cart } = useCartStore();
+    console.log(cart);
     return (
         <div className="py-8 md:py-16">
             <div className="mx-auto max-w-screen-xl px-4 2xl:px-0">

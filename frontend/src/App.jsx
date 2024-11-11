@@ -13,14 +13,22 @@ import Navbar from "./components/Navbar";
 import { useUserStore } from "./stores/useUserStore";
 import { useEffect } from "react";
 import LoadingSpinner from "./components/LoadingSpinner";
+import { useCartStore } from "./stores/useCartStore";
 
 function App() {
     const { user, checkAuth, checkingAuth } = useUserStore();
+    const { getCartItems } = useCartStore();
 
     useEffect(() => {
         console.log("checking auth");
         checkAuth();
     }, [checkAuth]);
+
+    useEffect(() => {
+        if (!user) return;
+
+        getCartItems();
+    }, [getCartItems, user]);
 
     if (checkingAuth) {
         return <LoadingSpinner />;

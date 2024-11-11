@@ -14,7 +14,7 @@ export const useCartStore = create((set, get) => ({
         set({ loading: true });
         try {
             const { data } = await axios.get("/coupon");
-            set({ coupon: data.coupon, loading: false });
+            set({ coupon: data, loading: false });
         } catch (error) {
             toast.error("Error while loading coupon");
             console.error(error);
@@ -45,7 +45,8 @@ export const useCartStore = create((set, get) => ({
         set({ loading: true });
         try {
             const { data } = await axios.get("/cart");
-            set({ cart: data.cart, loading: false });
+            console.log(data);
+            set({ cart: data, loading: false });
 
             get().calculateTotals();
         } catch (error) {
