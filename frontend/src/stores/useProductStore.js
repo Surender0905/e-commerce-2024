@@ -25,6 +25,8 @@ export const useProductStore = create((set, get) => ({
         set({ loading: true });
         try {
             const res = await axios.post("/products", product);
+
+            toast.success("Product added successfully");
             set((prevState) => ({
                 products: [...prevState.products, res.data],
                 loading: false,
@@ -62,15 +64,14 @@ export const useProductStore = create((set, get) => ({
     toggleFeaturedProduct: async (id) => {
         try {
             const response = await axios.patch(`/products/${id}`);
-            if (response.status === 200) {
-                set((state) => ({
-                    products: state.products.map((product) =>
-                        product.id === id
-                            ? { ...product, isFeatured: !product.isFeatured }
-                            : product,
-                    ),
-                }));
-            }
+            console.log(response, "test");
+            set((state) => ({
+                products: state.products.map((product) =>
+                    product._id === id
+                        ? { ...product, isFeatured: response.data.isFeatured }
+                        : product,
+                ),
+            }));
         } catch (error) {
             toast.error(
                 error.response.data.error || "Failed to toggle featured",
